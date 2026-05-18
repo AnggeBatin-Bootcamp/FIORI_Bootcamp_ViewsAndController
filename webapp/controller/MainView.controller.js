@@ -12,9 +12,22 @@ sap.ui.define([
         onInit() {
         },
         onAddItem: function (){
-                var oTextBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
-                var sMsg = oTextBundle.getText("addButtonMsg");
-                this.fnDisplayMsg(sMsg);
+               // var oTextBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+               // var sMsg = oTextBundle.getText("addButtonMsg");
+              //  this.fnDisplayMsg(sMsg);
+
+              //create dialog lazily
+                if (!this._oDialog) {
+                    this._oDialog = this.loadFragment({
+                        name: "com.training.exer5batin.fragment.ProductDialog"
+                    });
+                }
+                this._oDialog.then(function (oDialog) {
+                    oDialog.open();
+                });
+            },
+        onCloseDialog: function () {
+                this.getView().byId("idProductDialog").close();
             },
         onChangeMOP: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
@@ -73,12 +86,26 @@ sap.ui.define([
                 
             },
         onPressCheckout: function (){
-                var sFName = this.getView().byId("idInptFName").getValue().trim();
-                var sLName = this.getView().byId("idInptLName").getValue().trim();
-                    if (sFName === "" && sLName === "") {
-                     sap.m.MessageToast.show("First Name and Last Name are required.");
-                        return;
-                    }
+                var oInputFName = this.getView().byId("idInptFName");
+                var oInputLName = this.getView().byId("idInptLName");
+                var oInputFNameValue = oInputFName.getValue();
+                var oInputLNameValue = oInputLName.getValue();
+                var oRouter = this.getOwnerComponent().getRouter();
+
+                // Check if first name and last name is blank
+                if (oInputFNameValue === "" || oInputLNameValue === ""){
+                   
+                // set value state to Error
+                    oInputFName.setValueState("Error");
+                    oInputLName.setValueState("Error");
+                } else {
+                    oInputFName.setValueState("None");
+                    oInputLName.setValueState("None");
+                 //Navigate to review page passing first
+                    oRouter.navTo("RouteReviewPage", {
+                        firstName: oInputFNameValue
+                    });
+                }
             }
 
     });

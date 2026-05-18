@@ -79,19 +79,30 @@
           "target": [
             "TargetMainView"
           ]
+        },
+        {
+          "name": "RouteReviewPage",
+          "pattern": "Review/{firstName}",
+          "target": [
+            "TargetReviewPage"
+          ]
         }
       ],
       "targets": {
         "TargetMainView": {
           "id": "MainView",
           "name": "MainView"
+        },
+        "TargetReviewPage": {
+          "id": "ReviewPage",
+          "name": "ReviewPage"
         }
       }
     },
     "rootView": {
       "viewName": "com.training.exer5batin.view.App",
       "type": "XML",
-      "id": "App",
+      "id": "app",
       "async": true
     }
   },
